@@ -95,7 +95,25 @@ func (il *IntegerLiteral) String() string {
 
 // -----------------------------------------------------
 
-// let ステートメント（文）
+// 真偽値リテラル
+
+type Boolean struct {
+	Token token.Token
+	Value bool
+}
+
+func (b *Boolean) expressionNode() {
+}
+func (b *Boolean) TokenLiteral() string {
+	return b.Token.Literal
+}
+func (b *Boolean) String() string {
+	return b.Token.Literal
+}
+
+// -----------------------------------------------------
+
+// let文
 // 構造: let <identifier> = <expression>;
 
 type LetStatement struct {
@@ -127,7 +145,7 @@ func (ls *LetStatement) String() string {
 
 // -----------------------------------------------------
 
-// return ステートメント（文）
+// return文
 // 構造: return <expression>;
 
 type ReturnStatement struct {
@@ -150,6 +168,30 @@ func (rs *ReturnStatement) String() string {
 	}
 
 	out.WriteString(";")
+
+	return out.String()
+}
+
+// -----------------------------------------------------
+
+// block文
+
+type BlockStatement struct {
+	Token      token.Token // トークン
+	Statements []Statement
+}
+
+func (bs *BlockStatement) statementNode() {
+}
+func (bs *BlockStatement) TokenLiteral() string {
+	return bs.Token.Literal
+}
+func (bs *BlockStatement) String() string {
+	var out bytes.Buffer
+
+	for _, s := range bs.Statements {
+		out.WriteString(s.String())
+	}
 
 	return out.String()
 }
@@ -229,5 +271,36 @@ func (oe *InfixExpression) String() string {
 	out.WriteString(oe.Right.String())
 	out.WriteString(")")
 
+	return out.String()
+}
+
+// -----------------------------------------------------
+
+// if式
+
+type IfExpression struct {
+	Token       token.Token // 'if' トークン
+	Condition   Expression
+	Consequence *BlockStatement
+	Alternative *BlockStatement
+}
+
+func (ie *IfExpression) expressionNode() {
+}
+func (ie *IfExpression) TokenLiteral() string {
+	return ie.Token.Literal
+}
+func (ie *IfExpression) String() string {
+	var out bytes.Buffer
+
+	out.WriteString("if")
+	out.WriteString(ie.Condition.String())
+	out.WriteString(" ")
+	out.WriteString(ie.Consequence.String())
+
+	if ie.Alternative != nil {
+		out.WriteString("else ")
+		out.WriteString(ie.Alternative.String())
+	}
 	return out.String()
 }
