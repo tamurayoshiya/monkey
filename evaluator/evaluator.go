@@ -20,7 +20,9 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 	case *ast.ExpressionStatement:
 		return Eval(node.Expression, env)
 	case *ast.IntegerLiteral:
-		return &object.Integer{Value: node.Value}
+		return &object.Integer{
+			Value: node.Value,
+		}
 	case *ast.Boolean:
 		return nativeBoolToBooleanObject(node.Value)
 	case *ast.ReturnStatement:
@@ -28,7 +30,9 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		if isError(val) {
 			return val
 		}
-		return &object.ReturnValue{Value: val}
+		return &object.ReturnValue{
+			Value: val,
+		}
 	case *ast.PrefixExpression:
 		right := Eval(node.Right, env)
 		if isError(right) {
@@ -57,6 +61,12 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		env.Set(node.Name.Value, val)
 	case *ast.Identifier:
 		return evalIdentifier(node, env)
+	case *ast.FunctionLiteral:
+		return &object.Function{
+			Parameters: node.Parameters,
+			Env:        env,
+			Body:       node.Body,
+		}
 	}
 	return nil
 }
