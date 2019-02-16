@@ -46,6 +46,9 @@ const (
 
 	EQ     = "=="
 	NOT_EQ = "!="
+
+	// 文字列
+	STRING = "STRING"
 )
 
 var keywords = map[string]TokenType{
