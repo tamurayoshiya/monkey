@@ -53,6 +53,9 @@ const (
 	// 配列
 	LBRACKET = "["
 	RBRACKET = "]"
+
+	// ハッシュ
+	COLON = ":"
 )
 
 var keywords = map[string]TokenType{
