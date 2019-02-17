@@ -49,6 +49,10 @@ const (
 
 	// 文字列
 	STRING = "STRING"
+
+	// 配列
+	LBRACKET = "["
+	RBRACKET = "]"
 )
 
 var keywords = map[string]TokenType{
