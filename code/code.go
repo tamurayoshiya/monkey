@@ -51,6 +51,7 @@ type Opcode byte
 const (
 	OpConstant Opcode = iota
 	OpAdd
+	OpPop
 )
 
 type Definition struct {
@@ -65,6 +66,10 @@ var definitions = map[Opcode]*Definition{
 	},
 	OpAdd: {
 		Name:          "OpAdd",
+		OperandWidths: []int{}, // = has no operands
+	},
+	OpPop: {
+		Name:          "OpPop",
 		OperandWidths: []int{}, // = has no operands
 	},
 }
