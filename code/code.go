@@ -52,6 +52,9 @@ const (
 	OpConstant Opcode = iota
 	OpAdd
 	OpPop
+	OpSub
+	OpMul
+	OpDiv
 )
 
 type Definition struct {
@@ -70,7 +73,19 @@ var definitions = map[Opcode]*Definition{
 	},
 	OpPop: {
 		Name:          "OpPop",
-		OperandWidths: []int{}, // = has no operands
+		OperandWidths: []int{},
+	},
+	OpSub: {
+		Name:          "OpSub",
+		OperandWidths: []int{},
+	},
+	OpMul: {
+		Name:          "OpMul",
+		OperandWidths: []int{},
+	},
+	OpDiv: {
+		Name:          "OpDiv",
+		OperandWidths: []int{},
 	},
 }
 
