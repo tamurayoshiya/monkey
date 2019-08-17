@@ -7,6 +7,7 @@ import (
 
 	"github.com/tamurayoshiya/monkey/compiler"
 	"github.com/tamurayoshiya/monkey/lexer"
+	"github.com/tamurayoshiya/monkey/object"
 	"github.com/tamurayoshiya/monkey/parser"
 	"github.com/tamurayoshiya/monkey/vm"
 )
@@ -15,6 +16,9 @@ const PROMPT = ">> "
 
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
+	constants := []object.Object{}
+	globals := make([]object.Object, vm.GlobalsSize)
+	symbolTable := compiler.NewSymbolTable()
 	for {
 		fmt.Printf(PROMPT)
 		scanned := scanner.Scan()
@@ -36,14 +40,17 @@ func Start(in io.Reader, out io.Writer) {
 		// and heading for posterior, we have
 		// different steps for Compiler
 
-		comp := compiler.New()
+		comp := compiler.NewWithState(symbolTable, constants)
 		err := comp.Compile(program)
 		if err != nil {
 			fmt.Fprintf(out, "Woops! Compilation failed:\n %s\n", err)
 			continue
 		}
 
-		machine := vm.New(comp.Bytecode())
+		code := comp.Bytecode()
+		constants = code.Constants
+
+		machine := vm.NewWithGlobalsStore(code, globals)
 		err = machine.Run()
 		if err != nil {
 			fmt.Fprintf(out, "Woops! Executing bytecode failed::\n %s\n", err)
