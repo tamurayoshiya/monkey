@@ -70,6 +70,9 @@ const (
 	OpArray
 	OpHash
 	OpIndex
+	OpCall
+	OpReturnValue // for returning value
+	OpReturn      // for returning implicit vm.Null
 )
 
 type Definition struct {
@@ -160,6 +163,18 @@ var definitions = map[Opcode]*Definition{
 	},
 	OpIndex: {
 		Name:          "OpIndex",
+		OperandWidths: []int{},
+	},
+	OpCall: {
+		Name:          "OpCall",
+		OperandWidths: []int{},
+	},
+	OpReturnValue: {
+		Name:          "OpReturnValue",
+		OperandWidths: []int{},
+	},
+	OpReturn: {
+		Name:          "OpReturn",
 		OperandWidths: []int{},
 	},
 }
